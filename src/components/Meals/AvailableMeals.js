@@ -7,22 +7,42 @@ import classes from "./AvailableMeals.module.css";
 const AvailableMeals = () => {
 
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState([false]);
+  const [httpError, setHttpError] = useState();
+
   useEffect(() => {
     const fetchMeals = async () => {
-      const response = await fetch("https://react-http-cd08a-default-rtdb.firebaseio.com/meals.json");
-      const responseData = await response.json();
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          "https://react-http-cd08a-default-rtdb.firebaseio.com/meals.json"
+        );
 
-      const loadedMeals = [];
+        if (!response.ok) {
+          throw new Error(
+            "Something went wrong!"
+          );
+        }
 
-      for (const key in responseData) {
-        loadedMeals.push({
-          id: key,
-          name: responseData[key].name,
-          description: responseData[key].description,
-          price: responseData[key].price
-        });
+        const responseData = await response.json();
+
+        const loadedMeals = [];
+
+        for (const key in responseData) {
+          loadedMeals.push({
+            id: key,
+            name: responseData[key].name,
+            description: responseData[key].description,
+            price: responseData[key].price,
+          });
+        }
+
+        setMeals(loadedMeals);
+      } catch (error) {
+        setHttpError(error.message);
+      } finally {
+        setIsLoading(false);
       }
-      setMeals(loadedMeals);
     };
 
     fetchMeals();
@@ -42,6 +62,13 @@ const AvailableMeals = () => {
     <section className={classes.meals}>
       <Card>
         <ul>{mealsList}</ul>
+        {isLoading && <p style={{ textAlign: "center" }}>Loading...</p>}
+        {httpError && (
+          <p style={{ textAlign: "center", color: "red" }}>
+            {httpError}.<br />
+            Please check your connection and try again.
+          </p>
+        )}
       </Card>
     </section>
   );
