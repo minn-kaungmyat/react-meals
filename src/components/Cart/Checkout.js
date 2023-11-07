@@ -3,7 +3,8 @@ import { useRef, useState } from "react";
 import classes from "./Checkout.module.css";
 
 const isEmpty = (value) => value.trim() === "";
-const isFiveChars = (value) => value.trim().length === 5;
+const isFiveChars = (value) =>
+  value.trim().length === 5 && typeof +value === "number";
 
 const Checkout = (props) => {
   const nameInputRef = useRef();
@@ -21,7 +22,7 @@ const Checkout = (props) => {
     event.preventDefault();
 
     const enteredName = nameInputRef.current.value;
-    const enteredStreet = cityInputRef.current.value;
+    const enteredStreet = streetInputRef.current.value;
     const enteredPostalCode = postalCodeInputRef.current.value;
     const enteredCity = cityInputRef.current.value;
 
