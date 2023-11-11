@@ -6,11 +6,12 @@ const defaultCartState = {
   items: [],
   totalAmount: 0,
 };
-
+const roundTo2Decimal = (number) => Math.round(number * 100) / 100;
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
-    const updatedTotalAmount =
+    const caculatedPrice =
       state.totalAmount + action.item.price * action.item.amount;
+    const updatedTotalAmount = roundTo2Decimal(caculatedPrice);
 
     const existingCartItemIndex = state.items.findIndex(
       (item) => item.id === action.item.id
@@ -39,7 +40,8 @@ const cartReducer = (state, action) => {
       (item) => item.id === action.id
     );
     const existingCartItem = state.items[existingCartItemIndex];
-    const updatedTotalAmount = state.totalAmount - existingCartItem.price;
+    const caculatedPrice = state.totalAmount - existingCartItem.price;
+    const updatedTotalAmount = roundTo2Decimal(caculatedPrice);
     let updatedItems;
     if (existingCartItem.amount === 1) {
       updatedItems = state.items.filter((item) => item.id !== action.id);
@@ -56,7 +58,7 @@ const cartReducer = (state, action) => {
       totalAmount: updatedTotalAmount,
     };
   }
-if (action.type === "CLEAR") {
+  if (action.type === "CLEAR") {
     return defaultCartState;
   }
   return defaultCartState;
@@ -77,15 +79,15 @@ const CartProvider = (props) => {
   };
 
   const clearCartHandler = () => {
-    dispatchCartAction({type: "CLEAR"})
-  }
+    dispatchCartAction({ type: "CLEAR" });
+  };
 
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
-clearCart: clearCartHandler
+    clearCart: clearCartHandler,
   };
 
   return (
