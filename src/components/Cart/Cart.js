@@ -88,6 +88,7 @@ const Cart = (props) => {
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount:</span>
+        <span>Total Amount:</span>
         <span>{totalAmount}</span>
       </div>
       {isCheckout && hasItems && (
