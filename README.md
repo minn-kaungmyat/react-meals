@@ -4,7 +4,7 @@ Welcome to the React Meals Food Order app! This application allows users to brow
 
 ## Getting Started
 
-To get started with the Firebase-linked React Meals Food Order app, follow the steps below.
+To get started with React Meals Food Order app, follow the steps below.
 
 ### Prerequisites
 
